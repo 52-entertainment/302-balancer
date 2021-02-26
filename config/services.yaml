@@ -18,11 +18,11 @@ services:
             $pickingMethods: !tagged_locator { tag: 'app.picking_algorithm', default_index_method: 'getName' }
 
     App\:
-        resource: '../src/'
+        resource: '%kernel.project_dir%/src/'
         exclude:
-            - '../src/Model/'
-            - '../src/Kernel.php'
-            - '../src/functions.php'
+            - '%kernel.project_dir%/src/Model/'
+            - '%kernel.project_dir%/src/Kernel.php'
+            - '%kernel.project_dir%/src/functions.php'
 
     React\EventLoop\Factory: ~
 

@@ -1,0 +1,24 @@
+{
+    "main": "bin/console",
+    "directories": [
+        "config",
+        "src",
+        "var/cache/prod",
+        "vendor"
+    ],
+    "files": [
+        ".env",
+        ".env.local.php"
+    ],
+    "finder": [
+        {
+            "name": "*.php",
+            "exclude": [
+                "test",
+                "tests"
+            ],
+            "in": "vendor"
+        }
+    ],
+    "output": "build/redirect-balancer.phar"
+}
