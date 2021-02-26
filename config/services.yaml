@@ -7,25 +7,26 @@ parameters:
 
 services:
     # default configuration for services in *this* file
+    _instanceof:
+        App\PickAlgorithm\PickAlgorithmInterface:
+            tags: ['app.picking_algorithm']
+
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $pickingMethods: !tagged_locator { tag: 'app.picking_algorithm', default_index_method: 'getName' }
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
         exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
+            - '../src/Model/'
             - '../src/Kernel.php'
-            - '../src/Tests/'
+            - '../src/functions.php'
 
-    # controllers are imported separately to make sure services can be injected
-    # as action arguments even if you don't extend any base controller class
-    App\Controller\:
-        resource: '../src/Controller/'
-        tags: ['controller.service_arguments']
+    React\EventLoop\Factory: ~
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    React\EventLoop\LoopInterface:
+        factory: ['@React\EventLoop\Factory', 'create']
+
+    App\PickAlgorithm\PickAlgorithmInterface: '@App\PickAlgorithm\RoundRobin'

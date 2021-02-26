@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<ruleset
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd"
+>
+    <arg name="basepath" value="." />
+    <arg name="extensions" value="php" />
+    <arg name="parallel" value="80" />
+    <arg name="cache" value=".phpcs-cache" />
+    <arg name="colors" />
+
+    <!-- Ignore warnings, show progress of the run and show sniff names -->
+    <arg value="nps" />
+
+    <rule ref="PSR12">
+        <exclude name="PSR2.Methods.MethodDeclaration.Underscore" />
+        <exclude name="PSR2.Classes.PropertyDeclaration.ScopeMissing"/>
+        <exclude name="PSR12.Files.FileHeader.IncorrectOrder" />
+        <exclude name="Generic.WhiteSpace.ScopeIndent.IncorrectExact"/>
+        <exclude name="SlevomatCodingStandard.PHP.UselessParentheses.UselessParentheses" />
+    </rule>
+
+    <file>src/</file>
+    <file>tests/</file>
+</ruleset>
