@@ -12,6 +12,7 @@ use Psr\Http\Message\UriInterface;
 use React\EventLoop\LoopInterface;
 use React\Http\Server as HttpServer;
 use React\Socket\Server as SocketServer;
+use Sikei\React\Http\Middleware\CorsMiddleware;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,19 +27,14 @@ use function BenTools\UriFactory\Helper\uri;
 final class ServeCommand extends Command
 {
     protected static $defaultName = 'serve';
-    private LoopInterface $loop;
-    private RequestHandler $requestHandler;
-    private ServiceLocator $pickingMethods;
 
     public function __construct(
-        LoopInterface $loop,
-        RequestHandler $requestHandler,
-        ServiceLocator $pickingMethods
+        private LoopInterface $loop,
+        private RequestHandler $requestHandler,
+        private CorsMiddleware $corsMiddleware,
+        private ServiceLocator $pickingMethods,
     ) {
         parent::__construct();
-        $this->loop = $loop;
-        $this->requestHandler = $requestHandler;
-        $this->pickingMethods = $pickingMethods;
     }
 
     protected function configure(): void
@@ -71,7 +67,7 @@ final class ServeCommand extends Command
         );
         $this->requestHandler->algorithm = $this->pickingMethods->get($input->getOption('pick'));
         $this->requestHandler->serverRepository = new InMemoryRepository($servers);
-        $server = new HttpServer($this->loop, $this->requestHandler);
+        $server = new HttpServer($this->loop, $this->corsMiddleware, $this->requestHandler);
         $server->listen(new SocketServer($dsn, $this->loop));
         $this->loop->futureTick(function () use ($io, $dsn) {
             $io->success(\sprintf('Server running at http://%s', $dsn));
