@@ -5,32 +5,46 @@ declare(strict_types=1);
 namespace App\PickAlgorithm;
 
 use App\Model\Server;
+use App\PickAlgorithm\RoundRobin\InMemoryStorage;
+use App\PickAlgorithm\RoundRobin\RoundRobinStorageInterface;
 use App\Repository\ServerRepositoryInterface;
 
 final class RoundRobin implements PickAlgorithmInterface
 {
-    private ?Server $last = null;
+    private RoundRobinStorageInterface $storage;
+
+    public function __construct(
+        ?RoundRobinStorageInterface $storage = null,
+    ) {
+        $this->storage = $storage ?? new InMemoryStorage();
+    }
+
 
     public function pick(ServerRepositoryInterface $repository): Server
     {
-        $servers = $repository->getServers();
+        $servers = \array_values($repository->getServers());
 
         if (0 === \count($servers)) {
             throw new \RuntimeException('Nore more servers in the pool!');
         }
 
-        if (null === $this->last) {
-            return $this->last = ($servers[0] ?? throw new \RuntimeException('No more servers in the pool!'));
+        $lastServer = $this->storage->getLastServer();
+        if (null === $lastServer) {
+            $this->storage->storeLastServer($servers[0]);
+
+            return $servers[0];
         }
 
-        $current = \array_search($this->last, $servers, true);
-        if (false === $current) {
-            return $this->last = ($servers[0] ?? throw new \RuntimeException('No more servers in the pool!'));
+        if (false === ($i = \array_search($lastServer, $servers, true))) {
+            $this->storage->storeLastServer($servers[0]);
+
+            return $servers[0];
         }
 
-        return $this->last = $servers[$current + 1]
-            ?? $servers[0]
-            ?? throw new \RuntimeException('No more servers in the pool!');
+        $currentServer = $servers[$i + 1] ?? $servers[0];
+        $this->storage->storeLastServer($currentServer);
+
+        return $currentServer;
     }
 
     public static function getName(): string
