@@ -39,7 +39,7 @@ final class ServeCommand extends Command
 
     protected function configure(): void
     {
-        $this->addArgument('hosts', InputArgument::IS_ARRAY | InputArgument::REQUIRED, 'List of hosts');
+        $this->addArgument('hosts', InputArgument::IS_ARRAY, 'List of hosts');
         $this->addOption('host', null, InputOption::VALUE_OPTIONAL, 'Host to serve this app from.', '0.0.0.0');
         $this->addOption('port', null, InputOption::VALUE_OPTIONAL, 'Port to serve this app from.', 8080);
         $this->addOption('pick', null, InputOption::VALUE_OPTIONAL, 'Picking method.', RoundRobin::getName());
@@ -49,39 +49,53 @@ final class ServeCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $dsn = \sprintf('%s:%s', $input->getOption('host'), $input->getOption('port'));
-        $hosts = $input->getArgument('hosts');
-        $uris = \array_map(static function (string $host): UriInterface {
-            if (false === \str_starts_with($host, 'http://') && false === \str_starts_with($host, 'https://')) {
-                return uri('https://' . $host);
-            }
-            return uri($host);
-        }, $hosts);
-        $servers = \array_map(
-            static fn(UriInterface $uri) => new Server(
-                hostname: $uri->getHost(),
-                scheme: nullify($uri->getScheme()),
-                userInfo: nullify($uri->getUserInfo()),
-                port: nullify($uri->getPort())
-            ),
-            $uris
-        );
         $this->requestHandler->algorithm = $this->pickingMethods->get($input->getOption('pick'));
-        $this->requestHandler->serverRepository = new InMemoryRepository($servers);
+
+        if ([] !== ($hosts = $input->getArgument('hosts'))) {
+            $uris = \array_map(
+                static function (string $host): UriInterface {
+                    if (false === \str_starts_with($host, 'http://') && false === \str_starts_with($host, 'https://')) {
+                        return uri('https://' . $host);
+                    }
+
+                    return uri($host);
+                },
+                $hosts
+            );
+            $servers = \array_map(
+                static fn(UriInterface $uri) => new Server(
+                    scheme: nullify($uri->getScheme()),
+                    userInfo: nullify($uri->getUserInfo()),
+                    hostname: $uri->getHost(),
+                    port: nullify($uri->getPort())
+                ),
+                $uris
+            );
+            $this->requestHandler->serverRepository = new InMemoryRepository($servers);
+        }
+
         $server = new HttpServer($this->loop, $this->corsMiddleware, $this->requestHandler);
         $server->listen(new SocketServer($dsn, $this->loop));
-        $this->loop->futureTick(function () use ($io, $dsn) {
-            $io->success(\sprintf('Server running at http://%s', $dsn));
-        });
+        $this->loop->futureTick(
+            function () use ($io, $dsn) {
+                $io->success(\sprintf('Server running at http://%s', $dsn));
+            }
+        );
 
-        $this->loop->addSignal(\SIGINT, function () use ($io) {
-            $io->comment('Graceful shutdown requested. 👋');
-            $io->info(\sprintf(
-                'Memory usage: %dMB / Peak: %dMB',
-                \round(\memory_get_usage(true) / 1024 / 1024),
-                \round(\memory_get_peak_usage(true) / 1024 / 1024),
-            ));
-            $this->loop->stop();
-        });
+        $this->loop->addSignal(
+            \SIGINT,
+            function () use ($io) {
+                $io->comment('Graceful shutdown requested. 👋');
+                $io->info(
+                    \sprintf(
+                        'Memory usage: %dMB / Peak: %dMB',
+                        \round(\memory_get_usage(true) / 1024 / 1024),
+                        \round(\memory_get_peak_usage(true) / 1024 / 1024),
+                    )
+                );
+                $this->loop->stop();
+            }
+        );
 
         $this->loop->run();
 

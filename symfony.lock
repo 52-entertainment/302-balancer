@@ -17,6 +17,9 @@
     "filp/whoops": {
         "version": "2.9.2"
     },
+    "flow-control/react-inotify": {
+        "version": "v1.1.1"
+    },
     "myclabs/deep-copy": {
         "version": "1.10.2"
     },

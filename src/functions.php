@@ -16,3 +16,13 @@ function nullify(string | int | float | bool | null $value): string | int | floa
 
     return $value;
 }
+
+function cast_if_not_null(mixed $value, string $type): mixed
+{
+    if (null === $value) {
+        return $value;
+    }
+
+    \settype($value, $type);
+    return $value;
+}

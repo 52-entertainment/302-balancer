@@ -31,7 +31,7 @@ final class InMemoryRepository implements ServerRepositoryInterface
         $this->servers = \array_values(
             \array_filter(
                 $this->servers,
-                static fn (Server $server) => $server !== $serverToRemove
+                static fn (Server $server) => 0 === ($server <=> $serverToRemove)
             )
         );
     }

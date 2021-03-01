@@ -44,3 +44,9 @@ services:
                 max_age: '%env(default:cors_max_age:CORS_MAX_AGE)%'
 
     App\PickAlgorithm\PickAlgorithmInterface: '@App\PickAlgorithm\RoundRobin'
+
+    App\Repository\ServerRepositoryInterface: '@App\Repository\FileRepository'
+    App\Repository\FileRepository:
+        arguments:
+            $file: '%env(resolve:SERVERS_FILE)%'
+            $reloadOnChange: '%env(resolve:USE_INOTIFY)%'
