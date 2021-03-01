@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Model\Server;
+
 function nullify(string | int | float | bool | null $value): string | int | float | bool | null
 {
     if (null === $value) {

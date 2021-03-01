@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ebc4b26d6a6f78f30d08e8eb0d3d8cb5",
+    "content-hash": "25ef22829e77c4edd2927fee184230b6",
     "packages": [
         {
             "name": "bentools/uri-factory",
@@ -6312,7 +6312,8 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-inotify": "*",
-        "ext-pcntl": "*"
+        "ext-pcntl": "*",
+        "ext-redis": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"

@@ -28,7 +28,7 @@ final class RoundRobin implements PickAlgorithmInterface
             throw new \RuntimeException('Nore more servers in the pool!');
         }
 
-        $lastServer = $this->storage->getLastServer();
+        $lastServer = $this->storage->getLastServer($repository);
         if (null === $lastServer) {
             $this->storage->storeLastServer($servers[0]);
 

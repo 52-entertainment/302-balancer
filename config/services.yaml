@@ -34,6 +34,11 @@ services:
     React\EventLoop\LoopInterface:
         factory: ['@React\EventLoop\Factory', 'create']
 
+    Redis:
+        class: Redis
+        calls:
+            - ['connect', ['%env(key:host:url:ROUND_ROBIN_REDIS_DSN)%', '%env(key:port:url:ROUND_ROBIN_REDIS_DSN)%']]
+
     Sikei\React\Http\Middleware\CorsMiddleware:
         arguments:
             $settings:
@@ -50,3 +55,8 @@ services:
         arguments:
             $file: '%env(resolve:SERVERS_FILE)%'
             $reloadOnChange: '%env(resolve:USE_INOTIFY)%'
+
+    App\PickAlgorithm\RoundRobin\RoundRobinStorageInterface: '@App\PickAlgorithm\RoundRobin\InMemoryStorage'
+    App\PickAlgorithm\RoundRobin:
+        arguments:
+            $storage: '@App\PickAlgorithm\RoundRobin\RoundRobinStorageInterface'

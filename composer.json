@@ -9,6 +9,7 @@
         "ext-iconv": "*",
         "ext-inotify": "*",
         "ext-pcntl": "*",
+        "ext-redis": "*",
         "bentools/uri-factory": "^2.2",
         "christoph-kluge/reactphp-http-cors-middleware": "^2.0",
         "flow-control/react-inotify": "^1.1",

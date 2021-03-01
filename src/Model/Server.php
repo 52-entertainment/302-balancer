@@ -7,6 +7,7 @@ namespace App\Model;
 final class Server implements \JsonSerializable
 {
     public string $scheme;
+    private ?string $fingerprint = null;
 
     public function __construct(
         public string $hostname,
@@ -15,6 +16,11 @@ final class Server implements \JsonSerializable
         public ?int $port = null,
     ) {
         $this->scheme = $scheme ?? 'https';
+    }
+
+    public function getFingerprint(): ?string
+    {
+        return $this->fingerprint ??= \md5(\json_encode($this));
     }
 
     /**
@@ -42,5 +48,16 @@ final class Server implements \JsonSerializable
             hostname: $server['hostname'] ?? throw new \InvalidArgumentException('Missing hostname.'),
             port: $server['port'] ?? null,
         );
+    }
+
+    public static function fromFingerprint(string $fingerprint, Server ...$servers): ?Server
+    {
+        foreach ($servers as $server) {
+            if ($server->getFingerprint() === $fingerprint) {
+                return $server;
+            }
+        }
+
+        return null;
     }
 }
