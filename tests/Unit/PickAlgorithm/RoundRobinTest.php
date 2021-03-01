@@ -6,6 +6,7 @@ namespace App\Tests\Unit\PickAlgorithm;
 
 use App\Model\Server;
 use App\PickAlgorithm\RoundRobin;
+use App\Repository\InMemoryRepository;
 
 it('picks a random server', function () {
     $picker = new RoundRobin();
@@ -14,10 +15,11 @@ it('picks a random server', function () {
         'example.net' => new Server(hostname: 'example.net'),
         'example.org' => new Server(hostname: 'example.org'),
     ];
+    $repository = new InMemoryRepository(\array_values($servers));
     $picked = [];
 
     for ($i = 0; $i <= 1000; $i++) {
-        $picked[] = $picker->pick(...\array_values($servers));
+        $picked[] = $picker->pick($repository);
     }
 
     $counts = [

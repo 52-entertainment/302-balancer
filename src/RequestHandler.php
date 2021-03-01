@@ -28,7 +28,7 @@ final class RequestHandler
             return new Response(503, [], 'No back-end server was able to handle the request.');
         }
 
-        $server = $this->algorithm->pick(...$servers);
+        $server = $this->algorithm->pick($this->serverRepository);
 
         $location = (string) $serverRequest->getUri()
             ->withScheme($server->scheme)
