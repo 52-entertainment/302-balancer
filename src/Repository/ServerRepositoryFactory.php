@@ -17,6 +17,13 @@ final class ServerRepositoryFactory
 
     public function __invoke(bool $useRedis): ServerRepositoryInterface
     {
-        return $useRedis ? $this->redisRepository->withRedis(($this->redisFactory)()) : $this->fileRepository;
+        if ($useRedis) {
+            $client = ($this->redisFactory)(false);
+            $asyncClient = ($this->redisFactory)(true);
+
+            return $this->redisRepository->withRedis($client, $asyncClient);
+        }
+
+        return $this->fileRepository;
     }
 }

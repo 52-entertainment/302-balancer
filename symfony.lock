@@ -5,6 +5,12 @@
     "christoph-kluge/reactphp-http-cors-middleware": {
         "version": "2.0.0"
     },
+    "clue/redis-protocol": {
+        "version": "v0.3.1"
+    },
+    "clue/redis-react": {
+        "version": "v2.4.0"
+    },
     "doctrine/instantiator": {
         "version": "1.4.0"
     },
