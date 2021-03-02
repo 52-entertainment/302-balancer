@@ -9,6 +9,10 @@ parameters:
     cors_allow_methods: ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS']
     cors_allow_headers: ['DNT','X-Custom-Header','Keep-Alive','User-Agent','X-Requested-With','If-Modified-Since','Cache-Control','Content-Type','Content-Range','Range', 'Authorization']
     cors_max_age: 1728000
+    env(EXPOSE_HOST): '0.0.0.0'
+    env(EXPOSE_PORT): 8080
+    env(USE_REDIS): false
+    env(REDIS_DSN): 'redis://localhost'
 
 services:
     # default configuration for services in *this* file
@@ -34,11 +38,6 @@ services:
     React\EventLoop\LoopInterface:
         factory: ['@React\EventLoop\Factory', 'create']
 
-    Redis:
-        class: Redis
-        calls:
-            - ['connect', ['%env(key:host:url:ROUND_ROBIN_REDIS_DSN)%', '%env(key:port:url:ROUND_ROBIN_REDIS_DSN)%']]
-
     Sikei\React\Http\Middleware\CorsMiddleware:
         arguments:
             $settings:
@@ -50,13 +49,25 @@ services:
 
     App\PickAlgorithm\PickAlgorithmInterface: '@App\PickAlgorithm\RoundRobin'
 
-    App\Repository\ServerRepositoryInterface: '@App\Repository\FileRepository'
+    App\Repository\ServerRepositoryInterface:
+        factory: [ '@App\Repository\ServerRepositoryFactory', '__invoke' ]
+        arguments:
+            $useRedis: '%env(bool:USE_REDIS)%'
+
     App\Repository\FileRepository:
         arguments:
             $file: '%env(resolve:SERVERS_FILE)%'
-            $reloadOnChange: '%env(resolve:USE_INOTIFY)%'
 
-    App\PickAlgorithm\RoundRobin\RoundRobinStorageInterface: '@App\PickAlgorithm\RoundRobin\InMemoryStorage'
-    App\PickAlgorithm\RoundRobin:
+    App\RedisFactory:
         arguments:
-            $storage: '@App\PickAlgorithm\RoundRobin\RoundRobinStorageInterface'
+            $dsn: '%env(REDIS_DSN)%'
+
+    App\PickAlgorithm\RoundRobin\RoundRobinStorageInterface:
+        factory: ['@App\PickAlgorithm\RoundRobin\RoundRobinStorageFactory', '__invoke']
+        arguments:
+            $useRedis: '%env(bool:USE_REDIS)%'
+
+    App\Command\ServeCommand:
+        arguments:
+            $host: '%env(string:EXPOSE_HOST)%'
+            $port: '%env(int:EXPOSE_PORT)%'

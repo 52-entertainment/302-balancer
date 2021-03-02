@@ -23,7 +23,6 @@ final class FileRepository implements ServerRepositoryInterface
         private Filesystem $filesystem,
         private LoopInterface $loop,
         private string $file,
-        private bool $reloadOnChange = true,
     ) {
         $this->repository = new InMemoryRepository();
         $this->read();
@@ -50,17 +49,13 @@ final class FileRepository implements ServerRepositoryInterface
     public function __destruct()
     {
         if (\is_resource($this->fileDescriptor)) {
-            \inotify_rm_watch($this->fileDescriptor, $this->watchDescriptor);
-            \fclose($this->fileDescriptor);
+            @\inotify_rm_watch($this->fileDescriptor, $this->watchDescriptor);
+            @\fclose($this->fileDescriptor);
         }
     }
 
     private function watch(): void
     {
-        if (false === $this->reloadOnChange) {
-            return;
-        }
-
         if (false === \extension_loaded('inotify')) {
             return;
         }
@@ -98,7 +93,6 @@ final class FileRepository implements ServerRepositoryInterface
 
     private function write(Server ...$servers): void
     {
-        \touch($this->file);
         if (false === \is_writable($this->file)) {
             throw new \RuntimeException('Unable to write server file.');
         }

@@ -34,15 +34,17 @@ final class ServeCommand extends Command
         private RequestHandler $requestHandler,
         private CorsMiddleware $corsMiddleware,
         private ServiceLocator $pickingMethods,
+        private string $host,
+        private int $port,
     ) {
         parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this->addArgument('hosts', InputArgument::IS_ARRAY, 'List of hosts');
-        $this->addOption('host', null, InputOption::VALUE_OPTIONAL, 'Host to serve this app from.', '0.0.0.0');
-        $this->addOption('port', null, InputOption::VALUE_OPTIONAL, 'Port to serve this app from.', 8080);
+        $this->addArgument('hosts', InputArgument::IS_ARRAY, 'List of hosts to redirect to.');
+        $this->addOption('host', null, InputOption::VALUE_OPTIONAL, 'Host to serve this app from.', $this->host);
+        $this->addOption('port', null, InputOption::VALUE_OPTIONAL, 'Port to serve this app from.', $this->port);
         $this->addOption('pick', null, InputOption::VALUE_OPTIONAL, 'Picking method.', RoundRobin::getName());
     }
 
