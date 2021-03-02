@@ -7,6 +7,7 @@ namespace App\Command;
 use App\Model\Server;
 use App\PickAlgorithm\RoundRobin;
 use App\Repository\InMemoryRepository;
+use App\Repository\ServerRepositoryInterface;
 use App\RequestHandler;
 use Psr\Http\Message\UriInterface;
 use React\EventLoop\LoopInterface;
@@ -48,32 +49,10 @@ final class ServeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
+
         $dsn = \sprintf('%s:%s', $input->getOption('host'), $input->getOption('port'));
         $this->requestHandler->algorithm = $this->pickingMethods->get($input->getOption('pick'));
-
-        if ([] !== ($hosts = $input->getArgument('hosts'))) {
-            $uris = \array_map(
-                static function (string $host): UriInterface {
-                    if (false === \str_starts_with($host, 'http://') && false === \str_starts_with($host, 'https://')) {
-                        return uri('https://' . $host);
-                    }
-
-                    return uri($host);
-                },
-                $hosts
-            );
-            $servers = \array_map(
-                static fn(UriInterface $uri) => new Server(
-                    scheme: nullify($uri->getScheme()),
-                    userInfo: nullify($uri->getUserInfo()),
-                    hostname: $uri->getHost(),
-                    port: nullify($uri->getPort())
-                ),
-                $uris
-            );
-            $this->requestHandler->serverRepository = new InMemoryRepository($servers);
-        }
-
+        $this->requestHandler->serverRepository = $this->getServerRepository($input);
         $server = new HttpServer($this->loop, $this->corsMiddleware, $this->requestHandler);
         $server->listen(new SocketServer($dsn, $this->loop));
         $this->loop->futureTick(
@@ -100,5 +79,34 @@ final class ServeCommand extends Command
         $this->loop->run();
 
         return self::SUCCESS;
+    }
+
+    private function getServerRepository(InputInterface $input): ServerRepositoryInterface
+    {
+        if ([] === ($hosts = $input->getArgument('hosts'))) {
+            return $this->requestHandler->serverRepository;
+        }
+
+        $uris = \array_map(
+            static function (string $host): UriInterface {
+                if (false === \str_starts_with($host, 'http://') && false === \str_starts_with($host, 'https://')) {
+                    return uri('https://' . $host);
+                }
+
+                return uri($host);
+            },
+            $hosts
+        );
+        $servers = \array_map(
+            static fn(UriInterface $uri) => new Server(
+                scheme: nullify($uri->getScheme()),
+                userInfo: nullify($uri->getUserInfo()),
+                hostname: $uri->getHost(),
+                port: nullify($uri->getPort())
+            ),
+            $uris
+        );
+
+        return new InMemoryRepository($servers);
     }
 }
