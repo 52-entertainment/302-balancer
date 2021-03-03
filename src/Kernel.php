@@ -40,4 +40,9 @@ class Kernel extends BaseKernel
     {
         return \dirname(__DIR__);
     }
+
+    public function getLogDir(): string
+    {
+        return $_SERVER['APP_LOG_DIR'] ?? parent::getLogDir();
+    }
 }
