@@ -19,4 +19,4 @@
 /phpcs.xml
 ###< squizlabs/php_codesniffer ###
 
-/build/
+/bin/redirect-balancer.phar
