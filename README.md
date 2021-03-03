@@ -30,3 +30,13 @@ You can alternatively use a round-robin algorithm with `--pick=round-robin`.
 ```bash
 ./vendor/bin/pest
 ```
+
+## Build
+
+To build a phar archive, run:
+
+```bash
+./bin/build
+```
+
+It will land in `bin/302.phar`.
