@@ -11,7 +11,6 @@ parameters:
     cors_max_age: 1728000
     env(EXPOSE_HOST): '0.0.0.0'
     env(EXPOSE_PORT): 8080
-    env(USE_REDIS): false
     env(REDIS_DSN): 'redis://localhost'
 
 services:
@@ -49,23 +48,25 @@ services:
 
     App\PickAlgorithm\PickAlgorithmInterface: '@App\PickAlgorithm\RoundRobin'
 
-    App\Repository\ServerRepositoryInterface:
-        factory: [ '@App\Repository\ServerRepositoryFactory', '__invoke' ]
-        arguments:
-            $useRedis: '%env(bool:USE_REDIS)%'
-
-    App\Repository\FileRepository:
-        arguments:
-            $file: '%env(resolve:SERVERS_FILE)%'
+    App\Repository\ServerRepositoryInterface: '@App\Repository\RedisRepository'
 
     App\RedisFactory:
         arguments:
             $dsn: '%env(REDIS_DSN)%'
 
-    App\PickAlgorithm\RoundRobin\RoundRobinStorageInterface:
-        factory: ['@App\PickAlgorithm\RoundRobin\RoundRobinStorageFactory', '__invoke']
+    Redis:
+        class: Redis
+        factory: [ '@App\RedisFactory', '__invoke' ]
         arguments:
-            $useRedis: '%env(bool:USE_REDIS)%'
+            $async: false
+
+    Clue\React\Redis\Client:
+        class: Clue\React\Redis\Client
+        factory: [ '@App\RedisFactory', '__invoke' ]
+        arguments:
+            $async: true
+
+    App\PickAlgorithm\RoundRobin\RoundRobinStorageInterface: '@App\PickAlgorithm\RoundRobin\RedisStorage'
 
     App\Command\ServeCommand:
         arguments:

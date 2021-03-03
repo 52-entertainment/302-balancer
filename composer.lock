@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cc5b979227e60afda7e1ea1bf53579ac",
+    "content-hash": "e2c9aa83518cc76daa3254b42450ecf7",
     "packages": [
         {
             "name": "bentools/uri-factory",
@@ -294,56 +294,6 @@
                 "source": "https://github.com/igorw/evenement/tree/master"
             },
             "time": "2017-07-23T21:35:13+00:00"
-        },
-        {
-            "name": "flow-control/react-inotify",
-            "version": "v1.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/flow-control/react-inotify.git",
-                "reference": "ece8f9772206b6c7f2d24f7a36d826f2cbb94ebc"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/flow-control/react-inotify/zipball/ece8f9772206b6c7f2d24f7a36d826f2cbb94ebc",
-                "reference": "ece8f9772206b6c7f2d24f7a36d826f2cbb94ebc",
-                "shasum": ""
-            },
-            "require": {
-                "evenement/evenement": "^3",
-                "ext-inotify": "*",
-                "php": "^7.2|^8",
-                "react/event-loop": "^1"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.16",
-                "infection/infection": "^0.15.0|^0.16.0|^0.17.0|^0.18.0|^0.19.0|^0.20.0",
-                "phpstan/phpstan": "^0.12.58",
-                "phpunit/phpunit": "^8.5|^9.4",
-                "vimeo/psalm": "^4.2.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Flowcontrol\\React\\Inotify\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Event-driven inotify streams for non-blocking I/O in ReactPHP",
-            "keywords": [
-                "event-driven",
-                "inotify",
-                "non-blocking",
-                "reactphp"
-            ],
-            "support": {
-                "issues": "https://github.com/flow-control/react-inotify/issues",
-                "source": "https://github.com/flow-control/react-inotify/tree/v1.1.1"
-            },
-            "time": "2021-01-04T10:35:54+00:00"
         },
         {
             "name": "neomerx/cors-psr7",
@@ -4876,16 +4826,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.79",
+            "version": "0.12.80",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "dd7769915648b704b9bd12925994457f1c2c8442"
+                "reference": "c6a1b17f22ecf708d434d6bee05092647ec7e686"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/dd7769915648b704b9bd12925994457f1c2c8442",
-                "reference": "dd7769915648b704b9bd12925994457f1c2c8442",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c6a1b17f22ecf708d434d6bee05092647ec7e686",
+                "reference": "c6a1b17f22ecf708d434d6bee05092647ec7e686",
                 "shasum": ""
             },
             "require": {
@@ -4916,7 +4866,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/0.12.79"
+                "source": "https://github.com/phpstan/phpstan/tree/0.12.80"
             },
             "funding": [
                 {
@@ -4932,7 +4882,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-02-25T16:44:57+00:00"
+            "time": "2021-02-28T20:22:43+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -6488,7 +6438,6 @@
         "php": ">=8.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "ext-inotify": "*",
         "ext-pcntl": "*",
         "ext-redis": "*"
     },

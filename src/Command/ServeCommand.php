@@ -34,6 +34,7 @@ final class ServeCommand extends Command
         private RequestHandler $requestHandler,
         private CorsMiddleware $corsMiddleware,
         private ServiceLocator $pickingMethods,
+        private \Redis $redis,
         private string $host,
         private int $port,
     ) {
@@ -51,7 +52,6 @@ final class ServeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-
         $dsn = \sprintf('%s:%s', $input->getOption('host'), $input->getOption('port'));
         $this->requestHandler->algorithm = $this->pickingMethods->get($input->getOption('pick'));
         $this->requestHandler->serverRepository = $this->getServerRepository($input);

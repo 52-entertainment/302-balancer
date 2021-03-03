@@ -12,15 +12,15 @@ use Redis;
 final class RedisRepository implements ServerRepositoryInterface
 {
     private const NOTIFY_CHANNEL = 'servers_changed';
-
-    private Redis $redis;
-    private AsyncRedis $asyncRedis;
     private ?InMemoryRepository $repository = null;
 
     public function __construct(
         private LoopInterface $loop,
+        private Redis $redis,
+        private AsyncRedis $asyncRedis,
         private string $key = '302-servers',
     ) {
+        $this->watch();
     }
 
     public function getServers(): array
@@ -49,19 +49,9 @@ final class RedisRepository implements ServerRepositoryInterface
         $this->redis->publish(self::NOTIFY_CHANNEL, $payload);
     }
 
-    public function withRedis(Redis $redis, AsyncRedis $asyncRedis): self
-    {
-        $clone = clone $this;
-        $clone->redis = $redis;
-        $clone->asyncRedis = $asyncRedis;
-        $clone->watch();
-
-        return $clone;
-    }
-
     private function watch(): void
     {
-        $this->asyncRedis->subscribe(self::NOTIFY_CHANNEL);
+        $this->asyncRedis->subscribe(self::NOTIFY_CHANNEL); // @phpstan-ignore-line
         $this->asyncRedis->on('message', function (string $channel, $payload) {
             if (self::NOTIFY_CHANNEL !== $channel) {
                 return;
@@ -70,6 +60,9 @@ final class RedisRepository implements ServerRepositoryInterface
         });
     }
 
+    /**
+     * @return array<Server>
+     */
     private function fetchServers(): array
     {
         $payload = $this->redis->get($this->key);
@@ -77,6 +70,9 @@ final class RedisRepository implements ServerRepositoryInterface
         return $this->decodePayload($payload);
     }
 
+    /**
+     * @return array<Server>
+     */
     private function decodePayload(mixed $payload): array
     {
         if (empty($payload)) {
