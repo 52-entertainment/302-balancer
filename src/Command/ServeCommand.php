@@ -22,6 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
+use function App\draw_servers_table;
 use function App\nullify;
 use function BenTools\UriFactory\Helper\uri;
 
@@ -60,7 +61,7 @@ final class ServeCommand extends Command
         $this->loop->futureTick(
             function () use ($io, $dsn) {
                 $io->success(\sprintf('Server running at http://%s', $dsn));
-                $this->drawServersTable($io, ...$this->requestHandler->serverRepository->getServers());
+                draw_servers_table($io, ...$this->requestHandler->serverRepository->getServers());
             }
         );
 
@@ -111,20 +112,5 @@ final class ServeCommand extends Command
         );
 
         return new InMemoryRepository($servers);
-    }
-
-    private function drawServersTable(SymfonyStyle $io, Server ...$servers): void
-    {
-        $io->table(
-            ['Scheme', 'Hostname', 'Port'],
-            \array_map(
-                fn(Server $server) => [
-                    $server->scheme,
-                    $server->hostname,
-                    $server->port,
-                ],
-                $servers
-            )
-        );
     }
 }
