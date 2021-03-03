@@ -20,5 +20,5 @@
             "in": "vendor"
         }
     ],
-    "output": "bin/redirect-balancer.phar"
+    "output": "bin/302.phar"
 }
