@@ -13,7 +13,7 @@ use Psr\Http\Message\UriInterface;
 use React\EventLoop\LoopInterface;
 use React\Http\Server as HttpServer;
 use React\Socket\Server as SocketServer;
-use Sikei\React\Http\Middleware\CorsMiddleware;
+use Redis;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -33,9 +33,8 @@ final class ServeCommand extends Command
     public function __construct(
         private LoopInterface $loop,
         private RequestHandler $requestHandler,
-        private CorsMiddleware $corsMiddleware,
         private ServiceLocator $pickingMethods,
-        private \Redis $redis,
+        private Redis $redis,
         private string $host,
         private int $port,
     ) {
@@ -56,7 +55,7 @@ final class ServeCommand extends Command
         $dsn = \sprintf('%s:%s', $input->getOption('host'), $input->getOption('port'));
         $this->requestHandler->algorithm = $this->pickingMethods->get($input->getOption('pick'));
         $this->requestHandler->serverRepository = $this->getServerRepository($input);
-        $server = new HttpServer($this->loop, $this->corsMiddleware, $this->requestHandler);
+        $server = new HttpServer($this->loop, $this->requestHandler);
         $server->listen(new SocketServer($dsn, $this->loop));
         $this->loop->futureTick(
             function () use ($io, $dsn) {
