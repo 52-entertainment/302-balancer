@@ -20,5 +20,5 @@
             "in": "vendor"
         }
     ],
-    "output": "bin/302.phar"
+    "output": "bin/302"
 }

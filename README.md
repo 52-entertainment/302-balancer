@@ -22,12 +22,14 @@ To build the application, run:
 ./bin/build
 ```
 
+It will land in `bin/302`.
+
 ## Usage
 
 ### Live balancing (no persistence - for testing purposes or prototyping)
 
 ```bash
-php bin/302.phar serve \
+php bin/302 serve \
 --host=0.0.0.0 \
 --port=8080 \
 --pick=random \ # or round-robin
@@ -48,7 +50,7 @@ Location: http://example2.org/foo?bar=baz
 ```bash
 # Expose the REDIS_DSN variable if necessary, default is:
 export REDIS_DSN="redis://localhost:6379"
-php bin/302.phar serve --host=0.0.0.0 --port=8080
+php bin/302 serve --host=0.0.0.0 --port=8080
 ```
 
 _App will run, but user agent will get 503 errors because the server pool is empty._
@@ -56,23 +58,23 @@ _App will run, but user agent will get 503 errors because the server pool is emp
 #### Add a server to the pool
 
 ```bash
-php bin/302.phar server:add example1.org
+php bin/302 server:add example1.org
 ```
 
-_This command can be run while the `serve` command is running, no need to restart the app!_
+_This command can be run while `302 serve` is running, no need to restart the app!_
 
 #### Remove a server from the pool
 
 ```bash
-php bin/302.phar server:remove example1.org
+php bin/302 server:remove example1.org
 ```
 
-_This command can be run while the `serve` command is running, no need to restart the app!_
+_This command can be run while `302 serve` command is running, no need to restart the app!_
 
 #### List servers in the pool
 
 ```bash
-php bin/302.phar server:list
+php bin/302 server:list
 ```
 
 ## Tests
@@ -80,8 +82,6 @@ php bin/302.phar server:list
 ```bash
 ./vendor/bin/pest
 ```
-
-It will land in `bin/302.phar`.
 
 ## Deployment 
 

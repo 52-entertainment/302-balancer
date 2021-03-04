@@ -11,4 +11,4 @@ composer install --no-dev --ignore-platform-reqs \
 && php bin/console cache:warmup \
 && box compile
 
-echo "Done. PHAR built in $PROJECT_DIR/bin/302.phar."
+echo "Done. PHAR built in $PROJECT_DIR/bin/302."
