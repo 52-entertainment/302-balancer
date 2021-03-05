@@ -9,6 +9,7 @@ rm -rf var/cache/*
 composer install --no-dev --ignore-platform-reqs \
 && composer dump-env prod \
 && php bin/console cache:warmup \
-&& box compile
+&& box compile \
+&& composer install --ignore-platform-reqs \
+&& echo "Done. PHAR built in $PROJECT_DIR/bin/302."
 
-echo "Done. PHAR built in $PROJECT_DIR/bin/302."
