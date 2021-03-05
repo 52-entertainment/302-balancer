@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\RequestHandler;
+use App\Repository\ServerRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,7 +17,7 @@ final class ListServerCommand extends Command
     protected static $defaultName = 'server:list';
 
     public function __construct(
-        private RequestHandler $requestHandler,
+        private ServerRepositoryInterface $repository
     ) {
         parent::__construct();
     }
@@ -25,7 +25,7 @@ final class ListServerCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        draw_servers_table($io, ...$this->requestHandler->serverRepository->getServers());
+        draw_servers_table($io, ...$this->repository->getServers());
 
         return self::SUCCESS;
     }

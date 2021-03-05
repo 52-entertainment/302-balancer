@@ -31,20 +31,20 @@ final class RedisRepository implements ServerRepositoryInterface
 
     public function addServer(Server $server): void
     {
-        $servers = $this->getServers();
-        $servers[] = $server;
+        $this->getServers();
+        $this->repository->addServer($server);
 
-        $payload = \json_encode($servers);
+        $payload = \json_encode($this->repository->getServers());
         $this->redis->set($this->key, $payload);
         $this->redis->publish(self::NOTIFY_CHANNEL, $payload);
     }
 
     public function removeServer(Server $server): void
     {
-        $repo = new InMemoryRepository($this->getServers());
-        $repo->removeServer($server);
+        $this->getServers();
+        $this->repository->removeServer($server);
 
-        $payload = \json_encode($repo->getServers());
+        $payload = \json_encode($this->repository->getServers());
         $this->redis->set($this->key, $payload);
         $this->redis->publish(self::NOTIFY_CHANNEL, $payload);
     }

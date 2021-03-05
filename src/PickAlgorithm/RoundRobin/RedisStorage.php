@@ -31,12 +31,4 @@ final class RedisStorage implements RoundRobinStorageInterface
     {
         $this->redis->set($this->key, $server->getFingerprint());
     }
-
-    public function withRedis(Redis $redis): self
-    {
-        $clone = clone $this;
-        $clone->redis = $redis;
-
-        return $clone;
-    }
 }

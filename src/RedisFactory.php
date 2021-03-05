@@ -6,7 +6,6 @@ namespace App;
 
 use Clue\React\Redis\Factory as AsyncRedisFactory;
 use Clue\React\Redis\Client as AsyncRedis;
-use Clue\React\Redis\Client;
 use Nyholm\Dsn\DsnParser;
 use React\EventLoop\LoopInterface;
 use Redis;
