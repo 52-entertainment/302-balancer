@@ -2,9 +2,6 @@
     "bentools/uri-factory": {
         "version": "2.2"
     },
-    "christoph-kluge/reactphp-http-cors-middleware": {
-        "version": "2.0.0"
-    },
     "clue/block-react": {
         "version": "v1.4.0"
     },
@@ -32,14 +29,14 @@
     "myclabs/deep-copy": {
         "version": "1.10.2"
     },
-    "neomerx/cors-psr7": {
-        "version": "v1.0.13"
-    },
     "nikic/php-parser": {
         "version": "v4.10.4"
     },
     "nunomaduro/collision": {
         "version": "v5.3.0"
+    },
+    "nyholm/dsn": {
+        "version": "2.0.0"
     },
     "pestphp/pest": {
         "version": "v1.0.2"
