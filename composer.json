@@ -1,8 +1,7 @@
 {
     "type": "project",
     "license": "proprietary",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
+    "minimum-stability": "stable",
     "require": {
         "php": ">=8.0",
         "ext-ctype": "*",
