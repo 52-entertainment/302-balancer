@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "349b5088edd9f4b328703b5cf023a9af",
+    "content-hash": "a82a16e995a1af30b33abec216347da4",
     "packages": [
         {
             "name": "bentools/uri-factory",
