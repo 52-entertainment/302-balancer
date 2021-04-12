@@ -9,7 +9,6 @@
         "ext-pcntl": "*",
         "ext-redis": "*",
         "bentools/uri-factory": "^2.2",
-        "christoph-kluge/reactphp-http-cors-middleware": "^2.0",
         "clue/redis-react": "^2.4",
         "nyholm/dsn": "^2.0",
         "react/http": "^1.2",
