@@ -18,6 +18,12 @@
         "symfony/framework-bundle": "5.2.*",
         "symfony/yaml": "5.2.*"
     },
+    "require-dev": {
+        "clue/block-react": "^1.4",
+        "pestphp/pest": "^1.0",
+        "phpstan/phpstan": "^0.12.79",
+        "squizlabs/php_codesniffer": "^3.5"
+    },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": {
@@ -59,11 +65,5 @@
             "allow-contrib": false,
             "require": "5.2.*"
         }
-    },
-    "require-dev": {
-        "clue/block-react": "^1.4",
-        "pestphp/pest": "^1.0",
-        "phpstan/phpstan": "^0.12.79",
-        "squizlabs/php_codesniffer": "^3.5"
     }
 }
