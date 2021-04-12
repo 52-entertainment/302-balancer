@@ -125,7 +125,6 @@ example.org {
         method OPTIONS
     }
     header Access-Control-Allow-Origin *
-    header Access-Control-Allow-Headers Authorization
     header Access-Control-Allow-Redirect true
     respond @options 200
     reverse_proxy @get 127.0.0.1:8000 127.0.0.1:8001 127.0.0.1:8002 127.0.0.1:8003
