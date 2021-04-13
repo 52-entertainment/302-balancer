@@ -57,7 +57,11 @@
         },
         "post-autoload-dump": [
             "@auto-scripts"
-        ]
+        ],
+        "style:check": "vendor/bin/phpcs --standard=PSR12 -n src tests",
+        "phpstan:analyze": "vendor/bin/phpstan analyze",
+        "tests:run": "vendor/bin/pest",
+        "tests:run:with-coverage": "vendor/bin/pest --coverage-clover=coverage.xml"
     },
     "conflict": {
         "symfony/symfony": "*"
