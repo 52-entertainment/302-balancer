@@ -45,7 +45,7 @@ final class ServeCommand extends Command
     {
         $this->addArgument('hosts', InputArgument::IS_ARRAY, 'List of hosts to redirect to.');
         $this->addOption('host', null, InputOption::VALUE_OPTIONAL, 'Host to serve this app from.', $this->host);
-        $this->addOption('port', null, InputOption::VALUE_OPTIONAL, 'Port to serve this app from.', $this->port);
+        $this->addOption('port', null, InputOption::VALUE_OPTIONAL, 'Port to serve this app from.', $this->port); // @phpstan-ignore-line
         $this->addOption('pick', null, InputOption::VALUE_OPTIONAL, 'Picking method.', RoundRobin::getName());
     }
 
