@@ -5,9 +5,9 @@ env:
 
 on:
   push:
-    branches: [ main, staging, chore/continuous-integration ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, staging ]
+    branches: [ main ]
 
 jobs:
 
