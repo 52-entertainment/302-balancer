@@ -1,6 +1,8 @@
 {
+    "name": "52-entertainment/302",
+    "description": "A redirect balancer between several hosts.",
     "type": "project",
-    "license": "proprietary",
+    "license": "MIT",
     "minimum-stability": "stable",
     "require": {
         "php": ">=8.0",
