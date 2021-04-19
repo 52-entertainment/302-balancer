@@ -14,7 +14,9 @@ without blinking an eye.
 
 ## Build
 
-PHP 8, Composer and Redis are required.
+Build is optional (you can simply run `php bin/console serve`) but will produce an optimized, single-file executable PHAR.
+
+PHP 8, Composer and [Box](https://github.com/box-project/box/blob/master/doc/installation.md) are globally required on your computer.
 
 To build the application, run:
 
@@ -123,7 +125,6 @@ example.org {
         method OPTIONS
     }
     header Access-Control-Allow-Origin *
-    header Access-Control-Allow-Headers Authorization
     header Access-Control-Allow-Redirect true
     respond @options 200
     reverse_proxy @get 127.0.0.1:8000 127.0.0.1:8001 127.0.0.1:8002 127.0.0.1:8003
