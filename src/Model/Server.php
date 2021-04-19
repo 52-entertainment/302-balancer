@@ -42,7 +42,6 @@ final class Server implements \JsonSerializable
      */
     public static function fromArray(array $server): self
     {
-        // @phpstan-ignore-next-line
         return new self(
             scheme: $server['scheme'] ?? null,
             userInfo: $server['userInfo'] ?? null,

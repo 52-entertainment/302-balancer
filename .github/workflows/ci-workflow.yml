@@ -1,0 +1,68 @@
+name: CI Workflow
+
+env:
+  REDIS_DSN: "redis://127.0.0.1:6379"
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  code-style:
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0
+          extensions: redis
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Check code style
+        run: composer style:check
+
+      - name: Track avoidable bugs
+        run: composer phpstan:analyze
+
+  tests:
+
+    runs-on: ubuntu-20.04
+
+    services:
+      redis:
+        image: redis:6
+        ports:
+          - 6379:6379
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0
+          extensions: redis
+          coverage: pcov
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run tests
+        run: composer tests:run:with-coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

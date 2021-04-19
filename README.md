@@ -1,3 +1,7 @@
+[![CI Workflow](https://github.com/52-entertainment/302-balancer/actions/workflows/ci-workflow.yml/badge.svg)](https://github.com/52-entertainment/302-balancer/actions/workflows/ci-workflow.yml)
+[![Codecov](https://codecov.io/gh/52-entertainment/302-balancer/branch/main/graph/badge.svg?token=PJanAsdnnA)](https://codecov.io/gh/52-entertainment/302-balancer)
+
+
 # 302
 
 This is a load balancer that doesn't _act_ as a load balancer. 
